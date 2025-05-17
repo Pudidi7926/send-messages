@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kirim Pesan WhatsApp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 15px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1ebe5d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Kirim Pesan WhatsApp</h2>
+    <form id="waForm">
+      <label>Nama Anda:</label>
+      <input type="text" id="sender" placeholder="Nama pengirim" required />
+
+      <label>Nomor Tujuan (tanpa +, pisahkan dengan koma):</label>
+      <input type="text" id="recipients" placeholder="6281234567890,6289876543210" required />
+
+      <label>Pesan:</label>
+      <textarea id="message" rows="4" placeholder="Tulis pesan Anda..." required></textarea>
+
+      <button type="submit">Kirim via WhatsApp</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('waForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const sender = document.getElementById('sender').value.trim();
+      const recipients = document.getElementById('recipients').value.split(',').map(num => num.trim());
+      const message = document.getElementById('message').value.trim();
+
+      recipients.forEach(number => {
+        const fullMessage = `Halo, ini pesan dari ${sender}:
+${message}`;
+        const encoded = encodeURIComponent(fullMessage);
+        const waLink = `https://wa.me/${number}?text=${encoded}`;
+        window.open(waLink, '_blank');
+      });
+    });
+  </script>
+</body>
+</html>
