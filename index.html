@@ -1,21 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kirim Pesan WhatsApp</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background-color: #f0f0f0;
+      background: #f0f0f0;
     }
     .container {
       max-width: 500px;
       margin: auto;
       background: white;
-      padding: 30px;
+      padding: 25px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
@@ -37,6 +36,14 @@
     button:hover {
       background: #1ebe5d;
     }
+    .links {
+      margin-top: 20px;
+    }
+    .links a {
+      display: block;
+      margin-bottom: 8px;
+      color: #007BFF;
+    }
   </style>
 </head>
 <body>
@@ -44,16 +51,18 @@
     <h2>Kirim Pesan WhatsApp</h2>
     <form id="waForm">
       <label>Nama Anda:</label>
-      <input type="text" id="sender" placeholder="Nama pengirim" required />
+      <input type="text" id="sender" required>
 
-      <label>Nomor Tujuan (tanpa +, pisahkan dengan koma):</label>
-      <input type="text" id="recipients" placeholder="6281234567890,6289876543210" required />
+      <label>Nomor Tujuan (pisahkan dengan koma):</label>
+      <input type="text" id="recipients" placeholder="6281xxx,6282xxx" required>
 
       <label>Pesan:</label>
-      <textarea id="message" rows="4" placeholder="Tulis pesan Anda..." required></textarea>
+      <textarea id="message" rows="4" required></textarea>
 
-      <button type="submit">Kirim via WhatsApp</button>
+      <button type="submit">Buat Link WhatsApp</button>
     </form>
+
+    <div id="result" class="links"></div>
   </div>
 
   <script>
@@ -61,15 +70,21 @@
       e.preventDefault();
 
       const sender = document.getElementById('sender').value.trim();
-      const recipients = document.getElementById('recipients').value.split(',').map(num => num.trim());
+      const recipients = document.getElementById('recipients').value.split(',').map(n => n.trim());
       const message = document.getElementById('message').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = "<h4>Link WhatsApp:</h4>";
+
+      const fullMessage = `Halo, ini pesan dari ${sender}:\n${message}`;
+      const encodedMsg = encodeURIComponent(fullMessage);
 
       recipients.forEach(number => {
-        const fullMessage = `Halo, ini pesan dari ${sender}:
-${message}`;
-        const encoded = encodeURIComponent(fullMessage);
-        const waLink = `https://wa.me/${number}?text=${encoded}`;
-        window.open(waLink, '_blank');
+        const waLink = `https://wa.me/${number}?text=${encodedMsg}`;
+        const a = document.createElement('a');
+        a.href = waLink;
+        a.target = "_blank";
+        a.textContent = `Kirim ke ${number}`;
+        resultDiv.appendChild(a);
       });
     });
   </script>
